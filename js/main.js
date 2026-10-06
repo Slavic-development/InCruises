@@ -57,7 +57,19 @@ function setupLinks(){
  const wa=whatsappUrl();const instagram=String(config.instagram||'').trim();const ig=instagram.startsWith('https://')?safeUrl(instagram):(/^[\w.]+$/.test(instagram.replace(/^@/,''))?'https://www.instagram.com/'+instagram.replace(/^@/,'')+'/':'');
  for(const [selector,url] of [['[data-whatsapp]',wa],['[data-instagram]',ig]])document.querySelectorAll(selector).forEach(el=>{el.hidden=!url;if(url){el.href=url;el.target='_blank';el.rel='noopener noreferrer';}});
  document.querySelectorAll('.contact-note').forEach(el=>el.hidden=!wa);
- const name=String(config.consultantName||'').trim();if(name)document.querySelectorAll('.brand-copy small').forEach(el=>el.textContent=name);
+ const name=String(config.consultantName||'').trim();
+ if(name){
+  document.querySelectorAll('.brand-copy small').forEach(el=>el.textContent=name);
+  document.querySelectorAll('[data-consultant-name]').forEach(el=>el.textContent=name);
+  document.querySelectorAll('.consultant-initial').forEach(el=>el.textContent=name.charAt(0).toUpperCase());
+ }
+ document.querySelectorAll('.consultant-img').forEach(el=>el.setAttribute('alt',name?t(name+' — ваш консультант по членству',name+' — your membership consultant'):t('Ваш консультант по членству','Your membership consultant')));
+}
+function setupConsultant(){
+ document.querySelectorAll('.consultant-img').forEach(img=>{
+  const hide=()=>{img.hidden=true;};
+  if(img.complete&&img.naturalWidth===0)hide();else img.addEventListener('error',hide,{once:true});
+ });
 }
 function setupForms(){
  document.querySelectorAll('.inquiry-form').forEach(form=>form.addEventListener('submit',e=>{
@@ -93,7 +105,7 @@ function setupReveals(){document.documentElement.classList.add('js-ready');const
  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');observer.unobserve(e.target);}}),{threshold:.08});items.forEach(e=>observer.observe(e));}
 function setupFilters(){document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});document.querySelectorAll('[data-category]').forEach(card=>card.hidden=button.dataset.filter!=='all'&&card.dataset.category!==button.dataset.filter);}));}
 document.addEventListener('DOMContentLoaded',()=>{
- translate();setupMenu();setupLinks();setupForms();setupVideo();setupMembershipVideo();setupReveals();setupFilters();
+ translate();setupMenu();setupLinks();setupConsultant();setupForms();setupVideo();setupMembershipVideo();setupReveals();setupFilters();
  document.querySelectorAll('.lang-toggle').forEach(btn=>btn.addEventListener('click',()=>{language=language==='ru'?'en':'ru';try{localStorage.setItem('in_lang',language);}catch(_){}translate();setupLinks();}));
  ['plan-select','months'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updateBudget);});
  const top=document.querySelector('.back-to-top');const scroll=()=>{top.hidden=scrollY<700;document.querySelector('.site-header').classList.toggle('scrolled',scrollY>40);};window.addEventListener('scroll',scroll,{passive:true});scroll();top.addEventListener('click',()=>window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));

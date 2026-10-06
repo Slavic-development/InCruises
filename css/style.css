@@ -288,3 +288,57 @@ body{font-family:Manrope,Arial,sans-serif;background:var(--paper);font-size:15px
     font-size: 48px;
   }
 }
+
+/* V5: карточка консультанта в секции контактов */
+.consultant-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 26px;
+}
+
+.consultant-photo {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  flex: 0 0 62px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--cream);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.consultant-initial {
+  font: 800 24px/1 Manrope, system-ui, sans-serif;
+}
+
+.consultant-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.consultant-img[hidden] {
+  display: none;
+}
+
+.consultant-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.consultant-copy strong {
+  font: 800 17px/1.2 Manrope, system-ui, sans-serif;
+  color: var(--ink);
+}
+
+.consultant-copy span {
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--muted);
+}
